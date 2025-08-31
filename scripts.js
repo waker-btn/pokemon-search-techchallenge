@@ -1,11 +1,29 @@
-const totalPokemonNumber = 1302
+const totalPokemonNumber = 1302;
+let viewablePokemonNumber = 151;
 
-function fetchPokemonList() {
-    fetch('https://pokeapi.co/api/v2/pokemon?limit=' + totalPokemonNumber)
-    .then(response => response.json())
-    .then(function(pokemonNameList){
-        storeIndividualObjectsFromArray(pokemonNameList.results);
-    })
+async function addInitialPokemonToDOM() {
+
+    const fetchPokemonNames = await fetchPokemonList();
+
+    const storeNames = await storeIndividualObjectsFromArray(fetchPokemonNames.results);
+
+    /**const fetchAdditionalData = await fetchPokemonAdditional**/
+
+    let pokemonList = []
+    for (let i = 1; i <= totalPokemonNumber; i++){
+        pokemonList[i] = sessionStorage.getItem(i);
+    }
+
+    pokemonList.forEach(createPokemonCard);
+    
+
+}
+
+async function fetchPokemonList() {
+
+    const pokeFetch = await fetch('https://pokeapi.co/api/v2/pokemon?limit=' + totalPokemonNumber);
+    const masterPokemonList = await pokeFetch.json();
+    return masterPokemonList;
 }
 
 function storeIndividualObjectsFromArray(arr){
@@ -17,17 +35,8 @@ function storeIndividualObjectsFromArray(arr){
         sessionStorage.setItem(id, store);
         id++;
     });
-}
 
-function addInitialPokemonToDOM() {
-
-    let pokemonList = []
-    for (let i = 1; i <= totalPokemonNumber; i++){
-        pokemonList[i] = sessionStorage.getItem(i);
-    }
-
-    pokemonList.forEach(createPokemonCard);
-    
+    return true;
 
 }
 
@@ -61,12 +70,10 @@ function togglePokemonCardHidden (card) {
 
 
 if (sessionStorage.length === 0) {
-    fetchPokemonList();
+    let initialise = addInitialPokemonToDOM();
 }
 
-addInitialPokemonToDOM();
 
-togglePokemonCardHidden(document.getElementById("charmander"));
 
 
 

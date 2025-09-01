@@ -1,77 +1,102 @@
+html {
+    font-family: Verdana, Arial, sans-serif;
+    color:white;
+}
+
 body {
-    background-color: aqua;
+    background-color: #282a33;
     display: flex;
     flex-direction: column;
     margin: 0;
-    justify-content:space-evenly;
+    justify-content: space-evenly;
     min-height: 100vh;
+    flex-wrap: nowrap;
+
 }
 
 header {
-    background-color: blanchedalmond;
-    
+    background-color: #1b1c22;
+    padding: 20px;
+    flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+
 }
 
 main {
-    background-color: cadetblue;
-    display: flex;
+    background-color: #282a33;
     flex: 1;
 }
 
 footer{
-    background-color: coral;
+    background-color: #1b1c22;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
     
 }
 
-.sidebar{
-    flex-shrink: 0;
-    width:250px;
-    background-color: darkgoldenrod;
-    padding: 20px;
-    box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-}
+
+
+
 
 .content {
     padding: 16px;
     display: flex;
     flex-wrap: wrap;
     gap: 32px;
-    align-content: flex-start;
+    justify-content: center;
+    align-items: center;
 }
 
-.searches{
-    padding: 5px;
-    border-color: black;
-    border-style: solid;
-    display: flex;
-    flex-direction: column;
-    
-}
 
-h4{
+h4 {
     margin-top: 0px;
 }
 
 input {
-    margin: 10px 0px;
+    margin: 0px;
+    padding: 0px 20px;
+    height: 40px;
+    width: 30%;
+    font-size: larger;
 }
 
 .card {
-    background-color: white;
+    background-color: rgb(64, 67, 83);
     padding: 16px;
-    flex: 1;
-
-    /**width: 200px;
-    height: 200px;**/
+    width: 300px;
+    height: 300px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 25px;
 }
 
-h3{
+h3 {
     text-transform: capitalize;
+
 }
 
 .hidden {
-    display:none;
+    display: none;
+}
+
+.card img {
+    flex: 1;
+    width: 90%;
+    height: auto;
+}
+
+p {
+    text-align: center;
+}
+
+.card:hover{
+    background-color: rgb(77, 81, 100) ;
+}
+
+a{
+    color: white;
 }

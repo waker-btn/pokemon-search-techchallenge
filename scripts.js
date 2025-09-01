@@ -1,26 +1,44 @@
 const totalPokemonNumber = 1302;
 let viewablePokemonNumber = 151;
 let masterPokemonNames;
+let itemsPerPage = 18;
+let currentPage = 1;
+
+
 
 async function addInitialPokemonToDOM() {
 
     const initial = await initialise();
 
-    const fetchAdditionalData = await fetchPokemonAdditionalData(masterPokemonNames.results.slice(0, viewablePokemonNumber))
-
-    const storeNames = await storeIndividualObjectsFromArray(fetchAdditionalData);
-
-
-
     let pokemonList = []
-    for (let i = 1; i <= totalPokemonNumber; i++) {
-        pokemonList[i] = sessionStorage.getItem(i);
+    for (let i = 0; i < viewablePokemonNumber; i++) {
+        pokemonList[i] = sessionStorage.getItem(i + 1);
     }
 
-    pokemonList.forEach(createPokemonCard);
 
+    for (let i = 0; i < pokemonList.length; i++) {
+        createPokemonCard(pokemonList[i]);
+    }
+}
+
+async function initialise() {
+
+
+    if (sessionStorage.getItem("master") === null) {
+        masterPokemonNames = await fetchPokemonList();
+        sessionStorage.setItem("master", JSON.stringify(masterPokemonNames));
+    } else {
+        masterPokemonNames = JSON.parse(sessionStorage.getItem("master"));
+    }
+
+    if (sessionStorage.getItem(1) === null) {
+        const fetchAdditionalData = await fetchPokemonAdditionalData(masterPokemonNames.results.slice(0, viewablePokemonNumber))
+        const storeNames = await storeIndividualObjectsFromArray(fetchAdditionalData);
+    }
 
 }
+
+
 
 async function fetchPokemonList() {
 
@@ -29,7 +47,7 @@ async function fetchPokemonList() {
     return allPokemonList;
 }
 
- async function fetchPokemonAdditionalData(arr) {
+async function fetchPokemonAdditionalData(arr) {
 
     const keyPath = "sprites.other.official-artwork.front_default";
 
@@ -60,15 +78,17 @@ async function createPokemonCard(data) {
     let pokemon = JSON.parse(data);
     const card = document.createElement("div");
     const pokemonName = document.createElement("h3");
-    const pokemonNameText = document.createTextNode( await removeDashes(pokemon.name));
+    const pokemonNameText = document.createTextNode(await removeDashes(pokemon.name));
     const collection = document.querySelector(".content");
+    const sprite = document.createElement("img");
+    sprite.src = pokemon.imageURL;
+
     pokemonName.appendChild(pokemonNameText);
+    card.appendChild(sprite);
     card.appendChild(pokemonName);
     card.classList.add("card");
     card.setAttribute("id", pokemon.name);
     collection.appendChild(card);
-
-    /**togglePokemonCardHidden(card);**/
 
 }
 
@@ -79,21 +99,65 @@ async function removeDashes(text) {
 
 }
 
-async function togglePokemonCardHidden(card) {
-    card.classList.toggle("hidden");
+async function changePokemonCardHidden(card) {
+    card.classList.add("hidden");
 }
 
-async function initialise(){
+function changePokemonCardVisible(card) {
+    card.classList.remove("hidden");
+}
 
-    if (sessionStorage.getItem("master") === null) {
-    masterPokemonNames = await fetchPokemonList();
-    sessionStorage.setItem("master", JSON.stringify(masterPokemonNames));
-} else {
-    masterPokemonNames = JSON.parse(sessionStorage.getItem("master"));
+function initialiseSearchInput() {
+
+    let searchBar = document.querySelector("input");
+    searchBar.addEventListener("input", searchCards);
+
 }
+
+function searchCards(ev) {
+
+    let search = document.querySelector("input").value;
+
+    let allCards = document.querySelectorAll(".card");
+
+    let displayed = 0;
+
+    for (let i = 0; i < allCards.length; i++) {
+        let reg = new RegExp(search, "i");
+        if (allCards[i].id.search(reg) >= 0) {
+            changePokemonCardVisible(allCards[i]);
+            displayed++;
+        } else {
+            changePokemonCardHidden(allCards[i]);
+        }
+    }
+
+    let findPara = document.querySelector("p");
+
+    if (findPara !== null){
+        findPara.remove();
+    }
+
+    if (displayed === 0) {
+        const noResults = document.createElement("p");
+        const noResultsText = document.createTextNode("No results match your search query.");
+        const content = document.querySelector(".content");
+
+        noResults.appendChild(noResultsText);
+        content.appendChild(noResults);
+
+    }
 }
+
+
+
+
+
+
+
 
 addInitialPokemonToDOM();
+initialiseSearchInput();
 
 
 

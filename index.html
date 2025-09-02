@@ -6,24 +6,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="">
     <link rel="stylesheet" type="text/css" href="styles.css">
-    <title>Document</title>
+    <title>Pokemon Search</title>
 </head>
 
 <body>
     <header>
-        
+        <!-- Search input to filter Pokemon cards -->
         <input type="text" placeholder="Search...">
-     
     </header>
+
     <main>
+        <!-- Container for generated Pokemon cards -->
         <div class="content">
-            <!--<div class="card">gg</div>-->
+            <!-- Loading message will show until Pokemon are loaded -->
+            <p id="loading">Loading Pokemon...</p>
+
+            <!-- <div class="card">gg</div> -->
         </div>
     </main>
+
     <footer>
+        <!-- Attribution for PokeAPI -->
         All data sourced using&nbsp;<a href="https://pokeapi.co/">PokeAPI</a>
     </footer>
+
     <script src="scripts.js"></script>
+
 </body>
 
 </html>
